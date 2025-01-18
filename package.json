@@ -17,7 +17,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "build:release": "vite --config vite.release.config.ts build",
-    "publish:release": "npm publish",
+    "publish:release": "cd artifacts && npm publish",
     "lint": "eslint .",
     "preview": "vite preview"
   },
