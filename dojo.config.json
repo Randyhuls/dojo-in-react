@@ -1,0 +1,11 @@
+{
+  "async": true,
+  "baseUrl": "/",
+  "packages": [
+    { "name": "dojo", "location": "/vendor/dojo" },
+    { "name": "dijit", "location": "/vendor/dijit" },
+    { "name": "dojox", "location": "/vendor/dojox" },
+    { "name": "dojo-widgets", "location": "/dojo-widgets" }
+  ],
+  "debug": false
+}
