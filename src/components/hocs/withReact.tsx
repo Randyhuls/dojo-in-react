@@ -13,7 +13,7 @@ interface WithReactComponentProps<Props extends UnknownWidget> {
    * @param props 
    * @returns 
    */
-  onPropChange?: (props: Record<keyof Props, unknown>) => void;
+  onPropChange?: (prop: Record<keyof Props, unknown>) => void;
 };
 
 export const withReact = <DojoWidgetProps extends UnknownWidget>(widget: Widget) => {

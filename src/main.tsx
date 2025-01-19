@@ -26,8 +26,8 @@ export const Main = () => {
         <ReactInDojoButton 
           label={label}   
           subscribedProps={['label']}
-          onPropChange={(props) => {
-            setWidgetState({ ...widgetState, ...props })
+          onPropChange={(prop) => {
+            setWidgetState({ ...widgetState, ...prop })
           }}
         />
       )}

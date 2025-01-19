@@ -28,7 +28,6 @@ export const innerWidget = (widget: Widget | UnknownWidget): Widget => {
   if (isDojoWidget(widget)) return widget as unknown as Widget;
   
   if (typeof widget !== 'function') {
-    console.log('not widget?', widget)
     throw new Error('Unknown Widget must be a Function or a Dojo Widget');
   }
 
