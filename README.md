@@ -44,11 +44,11 @@ import { withReact } from 'dojo-in-react';
 import { MyDojoButton } from './my/dojo/widgets';
 
 // We add the `await` keyword since the widget returned by loadDojoWidget is a `Promise`
-const ReactInDojoButton = withReact(await DojoButton); 
+const DojoInReactButton = withReact(await DojoButton); 
 
 const MyReactComponent = () => {
   return (
-    <ReactInDojoButton> // Dojo widget acting as a regular React component
+    <DojoInReactButton> // Dojo widget acting as a regular React component
   )
 };
 ```
@@ -78,14 +78,14 @@ type DojoButtonProps {
 }
 
 // The interface can be passed to the high order function
-const ReactInDojoButton = withReact<DojoButtonProps>(await DojoButton); 
+const DojoInReactButton = withReact<DojoButtonProps>(await DojoButton); 
 
 const MyReactComponent = () => {
   const [somethingIsLoading, setSomethingIsLoading] = useState(false);
 
   return (
     // The wrapped widget now accepts the props defined in the interface
-    <ReactInDojoButton
+    <DojoInReactButton
       label="Bye Dojo, Hello React"
       isLoading={somethingIsLoading}
     >
@@ -100,7 +100,7 @@ With the `onPropChange` prop, changes can be monitored inside the Dojo widget.
 import { MyDojoButton } from './my/dojo/widgets';
 import withReact from 'dojo-in-react';
 
-const ReactInDojoButton = withReact(await Button);
+const DojoInReactButton = withReact(await Button);
 
 const MyReactComponent = () => {
   const onDojoWidgetPropChange = (prop: Record<string, unknown>) => {
@@ -108,7 +108,7 @@ const MyReactComponent = () => {
   }
 
   return (
-    <ReactInDojoButton
+    <DojoInReactButton
       label="Bye Dojo, Hello React"
       onPropChange={onDojoWidgetPropChange}
     > 
@@ -120,7 +120,7 @@ const MyReactComponent = () => {
 If you wish to only listen to specific prop changes, you can pass an string array through the `subscribedProps` prop.
 
 ```typescript
-<ReactInDojoButton
+<DojoInReactButton
   label="Bye Dojo, Hello React"
   onPropChange={onDojoWidgetPropChange}
   subscribedProps={['label']} // Listen only to changes of the `label` prop
