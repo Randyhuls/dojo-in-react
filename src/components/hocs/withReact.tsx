@@ -38,7 +38,6 @@ export const withReact = <DojoWidgetProps extends UnknownWidget>(widget: Widget)
        * which can call onPropChange when internal (non-function) properties have changed
        */
       if (isInitialMount.current) {
-        if (import.meta.env.PROD) isInitialMount.current = false;
         widget.current = createObservableWidget(DojoWidget, onPropChange, subscribedProps);      
       }
 
@@ -74,14 +73,15 @@ export const withReact = <DojoWidgetProps extends UnknownWidget>(widget: Widget)
     /**
      * @description Destroy the widget when the component is unmounted. Note that in development, 
      * React's Strict Mode immediately calls unmount before remounting the component. This is unfavorable for testing purposes 
-     * when working with Dojo widgets, so we bypass the initial unmount in a development environment.
+     * when working with Dojo widgets, so we bypass the initial unmount.
      */
     useEffect(() => {
       return () => {
-        if (import.meta.env.DEV && isInitialMount.current) {
+        if (isInitialMount.current) {
           isInitialMount.current = false;
           return
-        };
+        }
+        
         widget.current?.destroyRecursive();
       };
     }, [])
