@@ -35,7 +35,7 @@ export const MyDojoButton = loadDojoWidget('path/to/my/widget.js');
 
 #### withReact<T>(widget: Widget): JSX.Element
 `withReact` wraps a Dojo widget and returns a React component, binding the widget's lifecycle methods (`startUp`, `destroyRecursive`) to React's mount and unmount lifecycle hooks.
-The widgets DOM node is placed inside a React `ref` to persist the node across renders.
+The widget's DOM node is placed inside a React `ref` to persist the node across renders.
 
 > **Note**: If your project does not support top-level await, you will have to wrap your logic with an async [IIFE](https://developer.mozilla.org/en-US/docs/Glossary/IIFE)
 
@@ -60,7 +60,7 @@ In Dojo, imagine your widget instantiated in the following way:
 
 ```typescript
 new DojoButton({
-  label: "Bye Dojo, Hello React"
+  label: "Bye Dojo, Hello React",
   isLoading: false
 });
 ```
@@ -117,7 +117,7 @@ const MyReactComponent = () => {
 
 ```
 
-If you wish to only listen to specific prop changes, you can pass an string array through the `subscripedProps` prop.
+If you wish to only listen to specific prop changes, you can pass an string array through the `subscribedProps` prop.
 
 ```typescript
 <ReactInDojoButton
