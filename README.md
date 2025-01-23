@@ -48,7 +48,7 @@ const DojoInReactButton = withReact(await DojoButton);
 
 const MyReactComponent = () => {
   return (
-    <DojoInReactButton> // Dojo widget acting as a regular React component
+    <DojoInReactButton/> // Dojo widget acting as a regular React component
   )
 };
 ```
@@ -88,7 +88,7 @@ const MyReactComponent = () => {
     <DojoInReactButton
       label="Bye Dojo, Hello React"
       isLoading={somethingIsLoading}
-    >
+    />
   )
 };
 
@@ -111,7 +111,7 @@ const MyReactComponent = () => {
     <DojoInReactButton
       label="Bye Dojo, Hello React"
       onPropChange={onDojoWidgetPropChange}
-    > 
+    /> 
   )
 };
 
@@ -124,7 +124,7 @@ If you wish to only listen to specific prop changes, you can pass an string arra
   label="Bye Dojo, Hello React"
   onPropChange={onDojoWidgetPropChange}
   subscribedProps={['label']} // Listen only to changes of the `label` prop
-> 
+/> 
 ```
 
 #### Overview
