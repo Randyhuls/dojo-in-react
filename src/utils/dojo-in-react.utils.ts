@@ -20,18 +20,22 @@ export const isDojoWidget = (widget: Widget | UnknownWidget | unknown) => {
   return (
     'constructor' in widget && 
     'inherited' in widget && 
-    'destroy' in widget
+    'destroy' in widget &&
+    'set' in widget &&
+    'startup' in widget
   )
 }
 
-export const innerWidget = (widget: Widget | UnknownWidget): Widget => {
+export const innerWidget = (widget: Widget | UnknownWidget | unknown = {}): Widget => {
   if (isDojoWidget(widget)) return widget as unknown as Widget;
   
-  if (typeof widget !== 'function') {
-    throw new Error('Unknown Widget must be a Function or a Dojo Widget');
-  }
+  if (typeof widget === 'function') return innerWidget(widget());
 
-  return innerWidget(widget());
+  Object.values(widget as UnknownWidget).forEach((prop: unknown) => {
+     return isDojoWidget(prop) ? prop : innerWidget(prop);
+  });
+
+  throw new Error('Object is not a Dojo widget');
 }
 
 export const createObservableWidget = <T extends Record<string, unknown>>(widget: Widget, onPropChange?: (prop: T) => void, subscribedProps: string[] = []) => {
