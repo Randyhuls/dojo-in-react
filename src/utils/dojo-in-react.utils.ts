@@ -64,6 +64,20 @@ export const createObservableWidget = <T extends Record<string, unknown>>(widget
   });
 }
 
+export const bindDojoWidgetContext = (widget: Widget): Widget => {
+  if (!widget || typeof widget !== 'object') return widget;
+
+  const bound = Object.create(Object.getPrototypeOf(widget)) as Widget;
+
+  // Bind all methods to the widget instance
+  for (const key of Object.keys(widget)) {
+    const value = widget[key] as unknown;
+    bound[key] = typeof value === 'function' ? value.bind(widget) : value;
+  }
+
+  return bound;
+}
+
 export const pascalToSnakeCase = (value: string = '') => value.split(/\.?(?=[A-Z])/).join('_').toLowerCase();
 
 export const uniqueWidgetUUID = () =>  `DojoWidget-${crypto?.randomUUID?.() || Math.random().toString(36).substring(2, 15)}`;

@@ -1,5 +1,5 @@
 import { FC, useEffect, useRef } from 'react';
-import { pascalToSnakeCase, innerWidget, createObservableWidget, uniqueWidgetUUID } from '../../utils/dojo-in-react.utils';
+import { pascalToSnakeCase, innerWidget, createObservableWidget, uniqueWidgetUUID, bindDojoWidgetContext } from '../../utils/dojo-in-react.utils';
 
 interface WithReactComponentProps<Props extends UnknownWidget> {
   widget: Widget;
@@ -36,7 +36,7 @@ export const withReact = <DojoWidgetProps extends UnknownWidget>(widget: Widget)
       /**
       * @description The internal widget (that contains lifecycle methods)
       */
-      const internalWidget: Widget = innerWidget(DojoWidget); 
+      const internalWidget: Widget = bindDojoWidgetContext(innerWidget(DojoWidget)); 
 
       /**
        * @description Assign an observable version of the widget,
