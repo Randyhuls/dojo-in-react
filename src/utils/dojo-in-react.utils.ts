@@ -17,23 +17,37 @@ export const loadDojoWidget = async (path: string): Promise<Widget> => {
 export const isDojoWidget = (widget: Widget | UnknownWidget | unknown) => {
   if (!widget || typeof widget !== 'function' && typeof widget !== 'object') return false;
 
-  return (
-    'constructor' in widget && 
-    'inherited' in widget && 
-    'destroy' in widget &&
-    'set' in widget &&
-    'startup' in widget
-  )
+  const unknownWidget = widget as Record<string, unknown>;
+
+  const hasCoreProperties = (
+    'destroy' in widget && 
+    'set' in widget
+  );
+
+  const hasAdditionalProperties = (
+    typeof unknownWidget.startup === 'function'  || '_started' in unknownWidget ||
+    typeof unknownWidget.inherited === 'function' || 'domNode' in unknownWidget
+  );
+
+  return hasCoreProperties && hasAdditionalProperties;
 }
 
-export const innerWidget = (widget: Widget | UnknownWidget | unknown = {}): Widget => {
-  if (isDojoWidget(widget)) return widget as unknown as Widget;
-  
-  if (typeof widget === 'function') return innerWidget(widget());
+export const innerWidget = (widget: Widget | UnknownWidget | unknown, visited: WeakSet<object> = new WeakSet()): Widget => {
+  if (isDojoWidget(widget)) return widget as Widget;
 
-  Object.values(widget as UnknownWidget).forEach((prop: unknown) => {
-     return isDojoWidget(prop) ? prop : innerWidget(prop);
-  });
+  if (typeof widget === 'function') return innerWidget(widget(), visited);
+
+  // Check for circular references
+  if (widget && typeof widget === 'object') {
+    if (visited.has(widget)) throw new Error('Circular reference detected');
+    visited.add(widget);
+
+    // Check all property values for a Dojo widget
+    for (const value of Object.values(widget as UnknownWidget)) {
+      const result = innerWidget(value, visited);
+      if (isDojoWidget(result)) return result;
+    }
+  }
 
   throw new Error('Object is not a Dojo widget');
 }
