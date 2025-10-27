@@ -1,5 +1,5 @@
 import { FC, useEffect, useRef } from 'react';
-import { pascalToSnakeCase, innerWidget, isDojoWidget, createObservableWidget } from '../../utils/dojo-in-react.utils';
+import { pascalToSnakeCase, innerWidget, isDojoWidget, createObservableWidget, uniqueWidgetUUID } from '../../utils/dojo-in-react.utils';
 
 interface WithReactComponentProps<Props extends UnknownWidget> {
   widget: Widget;
@@ -19,7 +19,7 @@ interface WithReactComponentProps<Props extends UnknownWidget> {
 export const withReact = <DojoWidgetProps extends UnknownWidget>(widget: Widget) => {
   const DojoWidgetInReactComponent: FC<WithReactComponentProps<DojoWidgetProps>> = ({ widget: dojoWidget, onPropChange, subscribedProps = [], ...props }: WithReactComponentProps<DojoWidgetProps>) => {
     const DojoWidget = dojoWidget();
-    const widgetName = `${pascalToSnakeCase(DojoWidget.declaredClass).toUpperCase()}`;
+    const widgetName = `${pascalToSnakeCase(DojoWidget.declaredClass || uniqueWidgetUUID()).toUpperCase()}`;
 
     const isInitialMount = useRef<boolean>(true);
     const widgetContainerRef = useRef<HTMLDivElement>(null);
