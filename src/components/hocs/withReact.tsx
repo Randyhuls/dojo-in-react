@@ -18,7 +18,7 @@ interface WithReactComponentProps<Props extends UnknownWidget> {
 
 export const withReact = <DojoWidgetProps extends UnknownWidget>(widget: Widget) => {
   const DojoWidgetInReactComponent: FC<WithReactComponentProps<DojoWidgetProps>> = ({ widget: dojoWidget, onPropChange, subscribedProps = [], ...props }: WithReactComponentProps<DojoWidgetProps>) => {
-    const DojoWidget = dojoWidget();
+    const DojoWidget = typeof dojoWidget === 'function' ? dojoWidget() : dojoWidget;
     const widgetName = `${pascalToSnakeCase(DojoWidget.declaredClass || uniqueWidgetUUID()).toUpperCase()}`;
 
     const isInitialMount = useRef<boolean>(true);
