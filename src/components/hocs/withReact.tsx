@@ -34,11 +34,16 @@ export const withReact = <DojoWidgetProps extends UnknownWidget>(widget: Widget)
      */
     useEffect(() => {
       /**
+      * @description The internal widget (that contains lifecycle methods)
+      */
+      const internalWidget: Widget = innerWidget(DojoWidget); 
+
+      /**
        * @description Assign an observable version of the widget,
        * which can call onPropChange when internal (non-function) properties have changed
        */
       if (isInitialMount.current) {
-        widget.current = createObservableWidget(DojoWidget, onPropChange, subscribedProps);      
+        widget.current = createObservableWidget(internalWidget, onPropChange, subscribedProps);      
       }
 
       if (!widget.current) {
@@ -52,22 +57,17 @@ export const withReact = <DojoWidgetProps extends UnknownWidget>(widget: Widget)
       /**
       * @description Set the widget props
       */
-      widget.current?.set(props ?? {});
-
-      /**
-      * @description The internal widget (that contains lifecycle methods)
-      */
-      const internalWidget: Widget = innerWidget(widget?.current); 
+      widget.current.set(props ?? {});
         
       /**
        * @description Start the widget
        */
-      internalWidget.startup();
+      widget.current.startup();
 
       /**
        * @description Place the widget in the DOM container
        */
-      widget.current.placeAt(widgetContainerRef.current);  
+      widget.current.placeAt(widgetContainerRef.current);
     }, [props, DojoWidget, onPropChange, subscribedProps]);
 
     /**
@@ -88,7 +88,7 @@ export const withReact = <DojoWidgetProps extends UnknownWidget>(widget: Widget)
 
     return <div ref={widgetContainerRef} className={`__${widgetName}__ __DOJO_WIDGET__`} style={containerStyle}/>;
   };
-  DojoWidgetInReactComponent.displayName = `withReact(${widget.declaredClass ?? 'DojoWidget'})`;
+  DojoWidgetInReactComponent.displayName = `withReact(${widget.declaredClass ?? uniqueWidgetUUID()})`;
 
   return (props: DojoWidgetProps & Omit<WithReactComponentProps<DojoWidgetProps>, 'widget' | 'props'>) => <DojoWidgetInReactComponent widget={widget} {...props}/>;
 };
