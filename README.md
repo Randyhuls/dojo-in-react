@@ -127,6 +127,43 @@ If you wish to only listen to specific prop changes, you can pass an string arra
 /> 
 ```
 
+##### Complex widgets / widgets nested inside wrapper functions
+The AMD module might not directly return the Dojo widget due to architectural reason. Take the below example.
+
+Here the widget uses a `MyController` wrapper function with its own lifecycle methods which can be used for things like checking permissions before loading the actual widget. `withReact()` will break if you try load this module as it cannot find an actual Dojo widget.
+
+```typescript
+define([
+  'dojo-widgets/MyController',
+  'dojo-widgets/Button/Button.dojo',
+], function (MyController, Button) {
+  return MyController({
+    createButtonWidget: function() {
+      this.mainWidget = new Button({
+        label: 'Async Button',
+      });
+    },
+    init: function() {      
+      this.createButtonWidget();
+    }
+  });
+});
+
+```
+
+In this case we can use the `interceptOptions` which will allow us to wait for the initilization of a particular lifecycle method to end before attempting to find the widget.
+
+```typescript
+<DojoInReactAsyncButton
+   interceptOptions={{
+      lifecycleMethodName: 'init', // The method we wait for until binding the widget to the HOC
+      asyncWidgetPropName: 'mainWidget' // The prop where we know the widget will be set
+    }}
+/> 
+```
+
+Now we're able to retrieve the widget runtime, even when its initial value is null.
+
 #### Overview
 | Methods                                         | Description                                                       |
 |-------------------------------------------------|-------------------------------------------------------------------|

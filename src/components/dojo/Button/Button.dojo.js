@@ -28,8 +28,6 @@ define([
           if (this._started) {
               return;
           }
-          console.log('startup!');
-          console.log('this!', this);
           this.labelNode.innerHTML = this.label
       }
   });

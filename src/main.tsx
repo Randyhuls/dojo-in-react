@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 
 // Components
-import { Button, Select } from './components/dojo';
+import { Button, Select, AsyncButton } from './components/dojo';
 import withReact from './components/hocs/withReact';
 
 const DojoInReactButton = withReact<{ label: string }>(await Button);
+const DojoInReactAsyncButton = withReact<{ label: string }>(await AsyncButton);
 const SelectInReact = withReact(await Select);
 
 export const Main = () => {
@@ -36,6 +37,15 @@ export const Main = () => {
             }}
           />
         )}
+        
+        <DojoInReactAsyncButton 
+          label="Async Dojo-in-React Button"
+          interceptOptions={{
+            lifecycleMethodName: 'init',
+            asyncWidgetPropName: 'mainWidget'
+          }}
+        />
+
         <button onClick={setLabel.bind(null, 'Still a Dojo button!')}>Change Dojo Button label</button>
         <button onClick={setHideDojoButton.bind(null, !hideDojoButton)}>{!hideDojoButton ? 'Hide' : 'Show'} Dojo Button</button>
       </div>

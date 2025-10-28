@@ -64,6 +64,19 @@ export const createObservableWidget = <T extends Record<string, unknown>>(widget
   });
 }
 
+export const interceptOnReadyLifecycleMethod = <CallbackReturnValue = unknown>(widget: UnknownWidget, methodName: string, widgetPropName?: string, callback?: (deferredWidget?: Widget, result?: CallbackReturnValue) => void) => {
+  const originalMethod = widget[methodName] as (() => void | Promise<unknown>);
+  
+  if (typeof originalMethod !== 'function') {
+    throw new Error(`Method ${methodName} does not exist on the widget, or ${methodName} is not a function`);
+  }
+
+  widget[methodName] = async function (...args: unknown[]) {
+    const result = await originalMethod.apply(this, args as []) as CallbackReturnValue;
+    callback?.(widget[widgetPropName || ''] as Widget | undefined, result);
+  }
+}
+
 export const pascalToSnakeCase = (value: string = '') => value.split(/\.?(?=[A-Z])/).join('_').toLowerCase();
 
-export const uniqueWidgetUUID = () =>  `DojoWidget-${crypto?.randomUUID?.() || Math.random().toString(36).substring(2, 15)}`;
+export const uniqueWidgetUUID = () => `DojoWidget-${crypto?.randomUUID?.() || Math.random().toString(36).substring(2, 15)}`;
