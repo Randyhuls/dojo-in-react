@@ -23,7 +23,7 @@ npm i dojo-in-react
 Since AMD modules are loaded asynchronously in runtime, we can use the `loadDojoWidget` method to return a Promise containing the widget.
 The `path` argument accepts path names as defined in your `dojoConfig.baseUrl` and `dojoConfig.packages`.
 
-```typescript
+```ts
 import { loadDojoWidget } from 'dojo-in-react';
 
 const MyDojoButton = loadDojoWidget('path/to/my/widget.js');
@@ -39,7 +39,7 @@ The widget's DOM node is placed inside a React `ref` to persist the node across 
 
 > **Note**: If your project does not support top-level await, you will have to wrap your logic with an async [IIFE](https://developer.mozilla.org/en-US/docs/Glossary/IIFE)
 
-```typescript
+```jsx
 import { withReact } from 'dojo-in-react';
 import { MyDojoButton } from './my/dojo/widgets';
 
@@ -58,7 +58,7 @@ The wrapped widget accepts the same arguments (props) as the original Dojo widge
 
 In Dojo, imagine your widget instantiated in the following way:
 
-```typescript
+```js
 new DojoButton({
   label: "Bye Dojo, Hello React",
   isLoading: false
@@ -67,7 +67,7 @@ new DojoButton({
 
 Then in a React Typescript environment we could do the following:
 
-```typescript
+```jsx
 import { withReact } from 'dojo-in-react';
 import { MyDojoButton } from './my/dojo/widgets';
 
@@ -96,7 +96,7 @@ const MyReactComponent = () => {
 ##### Listening to changes inside the widget
 With the `onPropChange` prop, changes can be monitored inside the Dojo widget. 
 
-```typescript
+```jsx
 import { MyDojoButton } from './my/dojo/widgets';
 import withReact from 'dojo-in-react';
 
@@ -119,7 +119,7 @@ const MyReactComponent = () => {
 
 If you wish to only listen to specific prop changes, you can pass an string array through the `subscribedProps` prop.
 
-```typescript
+```jsx
 <DojoInReactButton
   label="Bye Dojo, Hello React"
   onPropChange={onDojoWidgetPropChange}
@@ -132,7 +132,7 @@ The AMD module might not directly return the Dojo widget due to architectural re
 
 Here the widget uses a `MyController` wrapper function with its own lifecycle methods which can be used for things like checking permissions before loading the actual widget. `withReact()` will break if you try load this module as it cannot find an actual Dojo widget.
 
-```typescript
+```js
 define([
   'dojo-widgets/MyController',
   'dojo-widgets/Button/Button.dojo',
@@ -153,7 +153,7 @@ define([
 
 In this case we can use the `interceptOptions` which will allow us to wait for the initilization of a particular lifecycle method to end before attempting to find the widget.
 
-```typescript
+```jsx
 <DojoInReactAsyncButton
    interceptOptions={{
       lifecycleMethodName: 'init', // The method we wait for until binding the widget to the HOC
