@@ -61,20 +61,25 @@ export const withReact = <DojoWidgetProps extends UnknownWidget>(widget: Widget)
         throw new Error('Widget HTML container is not available');
       }
 
-      /**
-      * @description Set the widget props
-      */
-      widget.current.set(props ?? {});
-        
-      /**
-       * @description Start the widget
-       */
-      widget.current.startup();
+      bootWidget(widget.current);
 
       /**
        * @description Place the widget in the DOM container
        */
       widget.current.placeAt(widgetContainerRef.current);
+    }
+
+    const bootWidget = (widget: Widget) => {
+     /**
+      * @description Set the widget props
+      */
+     
+      widget.set(props ?? {});
+        
+      /**
+       * @description Start the widget
+       */
+      widget.startup();
     }
 
     /**
@@ -105,6 +110,15 @@ export const withReact = <DojoWidgetProps extends UnknownWidget>(widget: Widget)
           await DojoWidget[interceptOptions.lifecycleMethodName]();
         }      
       })();
+    }, [DojoWidget]);
+
+    /**
+     * @description Start or restart widget when props change
+     */
+    useEffect(() => {
+      if (!widget.current) return;
+      
+      bootWidget(widget.current);
     }, [props, DojoWidget, onPropChange, subscribedProps]);
 
     /**

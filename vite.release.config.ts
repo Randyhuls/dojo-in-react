@@ -13,7 +13,7 @@ import { createPackageJSON } from './compiler/build.utils';
 
 const BUILD_PATH = './artifacts';
 const BUNDLE_NAME = 'bundle';
-const VERSION_NUMBER = '0.2.3'; // [!] Increment before publish new build
+const VERSION_NUMBER = '0.2.4'; // [!] Increment before publish new build
 const IS_PRIVATE_PACKAGE = false; // [!] Set to false to allow public access on the NPM registry
 
 const srcPackageJSON: Record<string, unknown> = JSON.parse(readFileSync('./package.json', 'utf-8').toString());
